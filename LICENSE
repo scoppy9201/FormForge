@@ -1,12 +1,11 @@
-OpnForm licensing
+FormForge Licensing
 
-Copyright (c) 2025 OpnForm
+Copyright (c) 2026 FormForge
 
 Portions of this software are licensed as follows:
 
--   All content that resides under the "api/app/Enterprise" directory of this repository, if this directory exists, is licensed under the license defined in "api/app/Enterprise/LICENSE".
--   All third party components incorporated into the OpnForm software are licensed under the original license provided by the owner of the applicable component.
--   Content outside of the above-mentioned directories or restrictions is available under the "AGPLv3" license as defined below.
+- All third-party components are licensed under their respective original licenses.
+- The rest of the source code is licensed under the GNU Affero General Public License v3 (AGPLv3).
 
                      GNU AFFERO GENERAL PUBLIC LICENSE
                          Version 3, 19 November 2007
