@@ -22,19 +22,17 @@ export function useFormIntegrations() {
 
   // Computed property for available integrations based on user subscription and feature flags
   const availableIntegrations = computed(() => {
-    if (!userData.value) return integrations.value
-
-    const enrichedIntegrations = new Map()
-    for (const [key, integration] of integrations.value.entries()) {
-      if (useFeatureFlag(`integrations.${key}`, true)) {
-        enrichedIntegrations.set(key, {
-          ...integration,
-          id: key,
-          requires_subscription: !userData.value.is_subscribed && integration.is_pro,
-        })
+      const enrichedIntegrations = new Map()
+      for (const [key, integration] of integrations.value.entries()) {
+          if (useFeatureFlag(`integrations.${key}`, true)) {
+              enrichedIntegrations.set(key, {
+                  ...integration,
+                  id: key, 
+                  requires_subscription: userData.value ? (!userData.value.is_subscribed && integration.is_pro) : false,
+              })
+          }
       }
-    }
-    return enrichedIntegrations
+      return enrichedIntegrations
   })
 
   // Computed property for integrations grouped by section

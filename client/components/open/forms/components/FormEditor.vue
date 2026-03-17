@@ -21,7 +21,7 @@
           class="w-10 h-10 text-blue-800"
         />
         <div class="p-5 text-blue-800 text-center">
-          OpnForm is not optimized for mobile devices. Please open this page on a device with a larger screen.
+          CRMGO is not optimized for mobile devices. Please open this page on a device with a larger screen.
         </div>
         <div>
           <UButton
@@ -249,34 +249,47 @@ const showValidationErrors = () => {
 }
 
 const saveForm = () => {
+  console.log('saveForm() called')
+  
   // Apply defaults to the form
   const defaultedData = setFormDefaults(form.value.data())
+  console.log('defaultedData:', defaultedData)
+  
   form.value.fill(defaultedData)
 
   // Check for logic errors
   const { getLogicErrors } = useFormLogic()
   logicErrors.value = getLogicErrors(form.value.properties)
   
+  console.log('logicErrors:', logicErrors.value)
+  
   if (logicErrors.value.length > 0) {
     showLogicConfirmationModal.value = true
     return
   }
   
+  console.log('Calling proceedWithSave()')
   proceedWithSave()
 }
 
 const proceedWithSave = () => {
+  console.log('proceedWithSave() called')
+  console.log('isGuest:', props.isGuest)
+  console.log('isEdit:', props.isEdit)
+  
   if (logicErrors.value.length > 0) {
-    // Clean invalid logic before saving using the comprehensive validator
     const { validatePropertiesLogic } = useFormLogic()
     form.value.properties = validatePropertiesLogic(form.value.properties)
   }
 
   if (props.isGuest) {
+    console.log('Calling saveFormGuest()')
     saveFormGuest()
   } else if (props.isEdit) {
+    console.log('Calling saveFormEdit()')
     saveFormEdit()
   } else {
+    console.log('Calling saveFormCreate()')
     saveFormCreate()
   }
 }
@@ -341,8 +354,18 @@ const saveFormEdit = () => {
 
 const saveFormCreate = () => {
   if (form.value.busy) return
-  // Attach workspace ID before sending
-  form.value.workspace_id = workspace.value.id
+
+  console.log('Save Form Create called')
+  console.log('Workspace:', workspace.value)
+  console.log('Form data:', form.value.data())
+
+  if (workspace.value && workspace.value.id) {
+    form.value.workspace_id = workspace.value.id
+  } else {
+    console.warn('No workspace in frontend, backend will auto-assign')
+    // Không set workspace_id, để backend tự động gán = user_id
+  }
+  
   validationErrorResponse.value = null
 
   form.value.mutate(createMutation).then((response) => {
@@ -375,11 +398,8 @@ const saveFormCreate = () => {
   }).catch((error) => {
     console.error("Error saving form", error)
     
-    // Check for 401 errors - these are handled by the HTTP interceptor
     const errorStatus = error?.response?.status || error?.status
     if (errorStatus === 401) {
-      // Token expiry is handled by the HTTP interceptor (opens QuickRegister modal)
-      // Don't show an additional error message
       return
     }
     
@@ -396,7 +416,9 @@ const saveFormCreate = () => {
 }
 
 const saveFormGuest = () => {
-  emit("openRegister")
+  if(form.value.busy) return
+  saveFormCreate()
+  console.log('EMIT DONE')
 }
 
 defineExpose({

@@ -50,7 +50,7 @@
             and readable. Example:
           </p>
           <p class="text-neutral-600 border p-4 bg-neutral-50 rounded-md mt-4">
-            https://opnform.com/forms/contact-form-e68des
+            https://CRMGO.com/forms/contact-form-e68des
           </p>
           <div class="text-center mt-4">
             <TrackClick
@@ -77,7 +77,7 @@
             and if you prefer to have a random non-guessable URL. Example:
           </p>
           <p class="text-neutral-600 p-4 border bg-neutral-50 rounded-md mt-4">
-            https://opnform.com/forms/b4417f9c-34ae-4421-8006-832ee47786e7
+            https://CRMGO.com/forms/b4417f9c-34ae-4421-8006-832ee47786e7
           </p>
           <div class="text-center mt-4">
             <TrackClick

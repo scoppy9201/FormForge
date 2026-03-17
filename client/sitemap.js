@@ -4,7 +4,7 @@ import opnformConfig from './opnform.config.js'
 
 export default {
   exclude: ['/subscriptions/**', '/templates/my-templates', '/setup'],
-  sources: [`${process.env.NUXT_PUBLIC_API_BASE}sitemap-urls`],
+  sources: ['/api/form-builder/sitemap-urls'],
   cacheMaxAgeSeconds: 60 * 60 * 2, // 2 hours
   xslColumns: [
     { label: 'URL', width: '50%' },

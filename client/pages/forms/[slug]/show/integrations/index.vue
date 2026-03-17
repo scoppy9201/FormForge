@@ -56,7 +56,7 @@
           <IntegrationListOption
             v-for="(sectionItem, sectionItemKey) in section"
             :key="sectionItemKey"
-            :integration="sectionItem"
+            :integration="{...sectionItem, id: sectionItemKey}"
             @select="openIntegration"
           />
         </div>
@@ -138,7 +138,10 @@ const openIntegration = (itemKey) => {
   }
 
   selectedIntegrationKey.value = itemKey
-  selectedIntegration.value = integrations.value.get(selectedIntegrationKey.value)
+  selectedIntegration.value = {
+    ...integrations.value.get(selectedIntegrationKey.value),
+    id: itemKey
+  }
   showIntegrationModal.value = true
 }
 

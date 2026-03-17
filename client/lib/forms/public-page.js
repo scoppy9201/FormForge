@@ -1,3 +1,5 @@
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
+
 let darkModeNodeParent = import.meta.client ? document.documentElement : null
 
 /**

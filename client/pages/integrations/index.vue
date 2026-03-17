@@ -202,7 +202,7 @@ const setupGuides = [
   {
     title: 'Email Integration Setup',
     steps: [
-      'Navigate to <b>OpnForm</b> > <b>Integrations</b>.',
+      'Navigate to <b>CRMGO</b> > <b>Integrations</b>.',
       'Select <b>Email</b> and configure SMTP settings.',
       'Set up email rules for notifications.',
       'Save & activate email alerts.'
@@ -211,7 +211,7 @@ const setupGuides = [
   {
     title: 'Slack Integration Setup',
     steps: [
-      'Navigate to <b>OpnForm</b> > <b>Integrations</b>.',
+      'Navigate to <b>CRMGO</b> > <b>Integrations</b>.',
       'Select <b>Slack</b> and authorize your workspace.',
       'Choose a channel & customize messages.',
       'Save & activate Slack alerts.'
@@ -220,7 +220,7 @@ const setupGuides = [
   {
     title: 'WebHook Integration Setup',
     steps: [
-      'Navigate to <b>OpnForm</b> > <b>Integrations</b>.',
+      'Navigate to <b>CRMGO</b> > <b>Integrations</b>.',
       'Select <b>WebHook</b> and enter your endpoint URL.',
       'Map fields & configure triggers.',
       'Save & activate WebHook alerts.'

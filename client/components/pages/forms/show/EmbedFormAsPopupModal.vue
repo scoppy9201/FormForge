@@ -71,13 +71,54 @@
             name="bgcolor"
             label="Circle Background Color"
           />
-          <TextInput
-            v-model="advancedOptions.emoji"
-            name="emoji"
-            class="mt-4 max-w-xs"
-            label="Emoji"
-            :max-char-limit="2"
-          />
+          
+          <!-- ✅ EMOJI PICKER - PHIÊN BẢN ĐƠN GIẢN -->
+          <div class="mt-4 max-w-xs">
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Emoji
+            </label>
+            <div class="relative">
+              <input
+                v-model="advancedOptions.emoji"
+                type="text"
+                readonly
+                class="w-full px-3 py-2 border border-gray-300 rounded-md cursor-pointer bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 text-2xl text-center"
+                @click="toggleEmojiPicker"
+                placeholder="💬"
+              />
+              
+              <!-- Emoji Picker Popup -->
+              <div
+                v-show="showEmojiPicker"
+                class="absolute z-50 mt-2 p-4 bg-white border border-gray-200 rounded-lg shadow-xl max-h-64 overflow-y-auto"
+                style="width: 320px;"
+                @click.stop
+              >
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-sm font-medium text-gray-700">Select an emoji</span>
+                  <button
+                    type="button"
+                    class="text-gray-400 hover:text-gray-600"
+                    @click="showEmojiPicker = false"
+                  >
+                    <Icon name="heroicons:x-mark" class="w-5 h-5" />
+                  </button>
+                </div>
+                <div class="grid grid-cols-8 gap-2">
+                  <button
+                    v-for="emoji in commonEmojis"
+                    :key="emoji"
+                    type="button"
+                    class="text-2xl hover:bg-gray-100 rounded p-2 transition-colors"
+                    @click="selectEmoji(emoji)"
+                  >
+                    {{ emoji }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           <FlatSelectInput
             v-model="advancedOptions.position"
             name="position"
@@ -102,7 +143,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from "vue"
+import { ref, defineProps, computed, onMounted, onBeforeUnmount } from "vue"
 import { appUrl } from "~/lib/utils.js"
 import TrackClick from "~/components/global/TrackClick.vue"
 
@@ -112,8 +153,58 @@ const props = defineProps({
   form: { type: Object, required: true },
 })
 
-const embedScriptUrl = "/widgets/embed-min.js"
+const embedScriptUrl = computed(() => {
+  if (import.meta.server) return "/widgets/embed-min.js"
+  return window.location.origin + "/widgets/embed-min.js"
+})
+
 const showEmbedFormAsPopupModal = ref(false)
+const showEmojiPicker = ref(false)
+
+const commonEmojis = [
+  '😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂',
+  '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩',
+  '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜',
+  '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐',
+  '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬',
+  '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒',
+  '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '😵', '🤯',
+  '💬', '💭', '💡', '💯', '🔥', '⭐', '✨', '💫',
+  '🎉', '🎊', '🎈', '🎁', '🏆', '🥇', '🥈', '🥉',
+  '⚡', '💥', '💢', '💨', '💦', '💧', '💤', '❤️',
+  '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍',
+  '👋', '👍', '👎', '👏', '🙌', '🙏', '✌️', '🤝',
+]
+
+const toggleEmojiPicker = () => {
+  showEmojiPicker.value = !showEmojiPicker.value
+}
+
+const selectEmoji = (emoji) => {
+  advancedOptions.value.emoji = emoji
+  showEmojiPicker.value = false
+}
+
+const handleClickOutside = (event) => {
+  if (showEmojiPicker.value) {
+    const emojiPicker = document.querySelector('.emoji-picker-popup')
+    const emojiInput = document.querySelector('.emoji-input')
+    
+    if (emojiPicker && !emojiPicker.contains(event.target) && 
+        emojiInput && !emojiInput.contains(event.target)) {
+      showEmojiPicker.value = false
+    }
+  }
+}
+
+onMounted(() => {
+  advancedOptions.value.bgcolor = props.form.color
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 
 // Modal state
 const isModalOpen = computed({
@@ -137,6 +228,7 @@ const advancedOptions = ref({
 const shareUrl = computed(() => {
   return props.form.share_url
 })
+
 const embedPopupCode = computed(() => {
   const nfData = {
     formurl: shareUrl.value,
@@ -150,21 +242,19 @@ const embedPopupCode = computed(() => {
     "<script async data-nf='" +
     JSON.stringify(nfData) +
     "' src='" +
-    appUrl(embedScriptUrl) +
+    embedScriptUrl.value + 
     "'></scrip" +
     "t>"
   )
-})
-
-onMounted(() => {
-  advancedOptions.value.bgcolor = props.form.color
 })
 
 const onClose = () => {
   removePreview()
   crisp.showChat()
   showEmbedFormAsPopupModal.value = false
+  showEmojiPicker.value = false
 }
+
 const onOpenClick = () => {
   const style = props.form?.presentation_style || 'classic'
   if (style === 'focused') {
@@ -173,11 +263,13 @@ const onOpenClick = () => {
   }
   showEmbedFormAsPopupModal.value = true
 }
+
 const copyToClipboard = () => {
   if (import.meta.server) return
   copy(embedPopupCode.value)
   useAlert().success("Copied!")
 }
+
 const removePreview = () => {
   if (import.meta.server) return
   const oldP = document.head.querySelector("#nf-popup-preview")
@@ -189,24 +281,21 @@ const removePreview = () => {
     oldM.remove()
   }
 }
+
 const previewPopup = (nfData) => {
   if (import.meta.server) return
-  if (!showEmbedFormAsPopupModal.value) {
-    return
-  }
+  if (!showEmbedFormAsPopupModal.value) return
 
-  // Remove old preview, if there
   removePreview()
-
-  // Hide crisp
   crisp.hideChat()
 
-  // Add new preview
+  const scriptUrl = window.location.origin + "/widgets/embed-min.js"
   const el = document.createElement("script")
   el.id = "nf-popup-preview"
   el.async = true
-  el.src = embedScriptUrl
+  el.src = scriptUrl
   el.setAttribute("data-nf", JSON.stringify(nfData))
+  
   document.head.appendChild(el)
 }
 </script>

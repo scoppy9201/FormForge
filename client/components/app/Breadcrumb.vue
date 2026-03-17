@@ -1,3 +1,4 @@
+
 <template>
   <section
     class="sticky flex items-center inset-x-0 top-0 z-10 py-3 bg-white border-b border-neutral-200"
@@ -13,7 +14,7 @@
         >
           <NuxtLink
             class="flex items-center text-neutral-400 hover:text-neutral-500"
-            :to="{ name: authenticated ? 'home' : 'index' }"
+            to="/home"
           >
             <Icon
               name="i-heroicons-home"
@@ -60,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 // Props
 defineProps({
@@ -74,12 +75,6 @@ defineProps({
   },
 })
 
-// Composables
-const { isAuthenticated } = useIsAuthenticated()
-
 // Reactive data
 const displayHome = ref(true)
-
-// Computed properties
-const authenticated = computed(() => isAuthenticated.value)
 </script>

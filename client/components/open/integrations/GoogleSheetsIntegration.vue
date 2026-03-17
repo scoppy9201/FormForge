@@ -65,7 +65,7 @@ const disableProviders = computed(() => (providersData.value || []).filter(provi
 const { openUserSettings } = useAppModals()
 
 function connect () {
-  oAuth.connect('google', true)
+  oAuth.connect('google', true, true, true)
 }
 
 function openConnectionsModal () {

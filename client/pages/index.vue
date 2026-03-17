@@ -27,7 +27,7 @@
               <a
                 target="_blank"
                 class="flex items-center gap-x-1 hover:no-underline"
-                href="https://github.com/OpnForm/OpnForm"
+                href="https://github.com/CRMGO/CRMGO"
               >
               <span
                 class="absolute inset-0"
@@ -283,7 +283,7 @@
         </div>
 
         <p class="mt-12 text-white text-lg">
-          The form below is an OpnForm, give it a try !
+          The form below is an CRMGO, give it a try !
         </p>
         <div
           class="md:max-w-5xl md:mx-auto w-full bg-white rounded-md mt-6 p-4 shadow-lg"
@@ -292,7 +292,7 @@
             class="mt-4"
             style="border: none; width: 100%"
             height="480px"
-            src="https://opnform.com/forms/opnform-contact"
+            src="https://CRMGO.com/forms/CRMGO-contact"
           />
         </div>
       </div>
@@ -308,7 +308,7 @@ import MoreFeatures from "../components/pages/welcome/MoreFeatures.vue"
 import PricingTable from "../components/pages/pricing/PricingTable.vue"
 import AiFeature from "../components/pages/welcome/AiFeature.vue"
 import TemplatesSlider from "../components/pages/welcome/TemplatesSlider.vue"
-import opnformConfig from "~/opnform.config.js"
+import opnformConfig from '~/opnform.config.js'
 import TrackClick from "~/components/global/TrackClick.vue"
 import { useIsAuthenticated } from '~/composables/useAuthFlow'
 

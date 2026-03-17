@@ -2,6 +2,7 @@
   <div class="w-full">
     <h3 class="font-medium text-lg mb-4">Traffic Breakdown</h3>
     
+    <!-- TODO: BẬT LẠI KHI CẦN PRO FEATURE
     <div v-if="!form.is_pro" class="border border-neutral-300 rounded-lg shadow-xs p-4 relative overflow-hidden">
       <div class="absolute inset-0 z-10">
         <div class="p-5 max-w-md mx-auto flex flex-col items-center justify-center h-full">
@@ -26,6 +27,10 @@
     </div>
     
     <VTransition v-else name="fade">
+    END PRO FEATURE CHECK -->
+    
+    <!-- TEMPORARY: Hiển thị cho tất cả user -->
+    <VTransition name="fade">
       <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div v-for="i in 6" :key="i" class="border border-neutral-300 rounded-lg shadow-xs p-4 space-y-4">
           <USkeleton class="h-6 w-24" />
@@ -105,7 +110,7 @@
 </template>
 
 <script setup>
-import ProTag from "~/components/app/ProTag.vue"
+import ProTag from "~/components/app/ProTag.vue" // TODO: Giữ lại để sau bật lại
 
 const props = defineProps({
   form: { 
@@ -122,7 +127,7 @@ const props = defineProps({
   }
 })
 
-const { openSubscriptionModal } = useAppModals()
+const { openSubscriptionModal } = useAppModals() // TODO: Giữ lại để sau bật lại
 
 // Chart types configuration
 const chartTypes = [

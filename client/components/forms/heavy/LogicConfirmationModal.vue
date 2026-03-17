@@ -59,6 +59,8 @@
 </template>
 
 <script setup>
+import { computed, defineProps, defineEmits } from 'vue'
+
 const props = defineProps({
   isVisible: {
     type: Boolean,

@@ -115,7 +115,7 @@
             <div>
               <h4 class="text-sm font-medium text-neutral-900">Rate Limits</h4>
               <p class="text-sm text-neutral-600 mt-1">
-                API requests are rate limited. <a href="https://docs.opnform.com/api-reference/introduction#rate-limits" target="_blank" class="text-blue-500 hover:underline">Check our documentation</a> for current limits and best practices.
+                API requests are rate limited. <a href="https://docs.CRMGO.com/api-reference/introduction#rate-limits" target="_blank" class="text-blue-500 hover:underline">Check our documentation</a> for current limits and best practices.
               </p>
             </div>
           </div>

@@ -15,32 +15,22 @@
 
     <MentionInput
       :form="integrationData"
-      :mentions="form.properties"
-      :disable-mention="!form.is_pro"
-      :disabled="!form.is_pro"
+      :mentions="form?.properties || []"
       name="data.send_to"
       required
       label="Send To"
     >
       <template #help>
         <InputHelp>
-        <span v-if="form.is_pro">
           Add one email per line
-        </span>
-        <span v-else>
-          You can only send email notification to your own email address. 
-          Please <a
-            class="underline cursor-pointer"
-            @click="openSubscriptionModal"
-          >upgrade to the Pro plan</a> to send to other email addresses.
-        </span>
         </InputHelp>
       </template>
     </MentionInput> 
+    
     <div class="flex space-x-4">
       <MentionInput
         :form="integrationData"
-        :mentions="form.properties"
+        :mentions="form?.properties || []"
         name="data.sender_name"
         label="Sender Name"
         class="flex-1"
@@ -54,20 +44,23 @@
         class="flex-1"
       />
     </div>
+    
     <MentionInput
       :form="integrationData"
-      :mentions="form.properties"
+      :mentions="form?.properties || []"
       required
       name="data.subject"
       label="Subject"
     />
+    
     <rich-text-area-input
       :form="integrationData"
       :enable-mentions="true"
-      :mentions="form.properties"
+      :mentions="form?.properties || []"
       name="data.email_content"
       label="Email Content"
     />
+    
     <toggle-switch-input
       :form="integrationData"
       name="data.include_submission_data"
@@ -75,6 +68,7 @@
       label="Include submission data"
       help="If enabled the email will contain form submission answers"
     />
+    
     <toggle-switch-input
       v-if="integrationData.data.include_submission_data"
       :form="integrationData"
@@ -83,16 +77,18 @@
       label="Include hidden fields"
       help="If enabled the email will contain hidden fields"
     />
+    
     <toggle-switch-input
-      v-if="form.editable_submissions"
+      v-if="form?.editable_submissions"
       :form="integrationData"
       name="data.link_edit_submission"
       class="mt-4"
       label="Edit Submission Link"
     />
+    
     <MentionInput
       :form="integrationData"
-      :mentions="form.properties"
+      :mentions="form?.properties || []"
       class="mt-4"
       name="data.reply_to"
       label="Reply To"
@@ -127,9 +123,30 @@ function openSubscriptionModal () {
 }
 
 onBeforeMount(() => {
+  // Lấy user từ URL params hoặc localStorage
+  const urlParams = new URLSearchParams(window.location.search)
+  
+  const userEmail = urlParams.get('user_email') || 
+                    localStorage.getItem('crm_user_email') || 
+                    user.value?.email || 
+                    ''
+                    
+  const userName = urlParams.get('user_name') || 
+                   localStorage.getItem('crm_user_name') || 
+                   user.value?.name || 
+                   'CRMGO'
+  
+  // Lưu vào localStorage nếu có từ URL
+  if (urlParams.get('user_email')) {
+    localStorage.setItem('crm_user_email', urlParams.get('user_email'))
+    localStorage.setItem('crm_user_name', urlParams.get('user_name') || '')
+  }
+  
+  console.log('Final user data:', { email: userEmail, name: userName })
+  
   for (const [keyname, defaultValue] of Object.entries({
-    send_to: user.value.email || '',
-    sender_name: "OpnForm",
+    send_to: userEmail,
+    sender_name: userName,
     subject: "We saved your answers",
     email_content: "Hello there 👋 <br>This is a confirmation that your submission was successfully saved.",
     include_submission_data: true,

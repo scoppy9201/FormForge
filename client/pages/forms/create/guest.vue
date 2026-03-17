@@ -13,7 +13,6 @@
         :error="error"
         :is-guest="isGuest"
         :loading="workspacesLoading"
-        @open-register="appStore.quickRegisterModal = true"
       />
     </VTransition>
   </div>
@@ -53,7 +52,7 @@ useOpnSeoMeta({
   title: "Create a new Form for free",
 })
 definePageMeta({
-  middleware: ["guest", "self-hosted"],
+  middleware: [],  // ← Xóa hết middleware
   layout: 'empty'
 })
 

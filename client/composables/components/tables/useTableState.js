@@ -68,6 +68,7 @@ export function useTableState(form, withActions = false) {
            enableResizing: true,
            minSize: 100,
            maxSize: 500,
+           isSystemColumn: true
          })
        }
 
@@ -85,15 +86,19 @@ export function useTableState(form, withActions = false) {
   // Column visibility
   const columnVisibility = computed({
     get() {
-      // Establish dependency on the entire preferences object
       const prefs = columnPreferences.preferences.value
       const visibility = {}
       const configCols = columnConfigurations.value || []
       configCols.forEach(col => {
         const pref = prefs.columns[col.id] || {}
-        // Use preference if set, otherwise default: visible for regular columns, hidden for removed columns
-        const visible = pref.visible !== null && pref.visible !== undefined ? pref.visible : !col.isRemoved
-        visibility[col.id] = visible
+
+        if (col.isSystemColumn) {
+          visibility[col.id] = true
+        } else {
+          // Use preference if set, otherwise default: visible for regular columns, hidden for removed columns
+          const visible = pref.visible !== null && pref.visible !== undefined ? pref.visible : !col.isRemoved
+          visibility[col.id] = visible
+        }
       })
       return visibility
     },

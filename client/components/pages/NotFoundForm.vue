@@ -45,7 +45,7 @@
           </p>
           <ul class="mt-4 space-y-2 text-sm">
             <li>
-              Do you want to know why users choose OpnForm? 
+              Do you want to know why users choose CRMGO? 
               <NuxtLink
                 class="text-blue-500 hover:text-blue-600"
                 :to="{ name: 'ai-form-builder' }"
@@ -66,7 +66,7 @@
               Check Out Our Help Center
               <NuxtLink
                 class="text-blue-500 hover:text-blue-600"
-                to="https://help.opnform.com/en/"
+                to="https://help.CRMGO.com/en/"
               >
                 Find quick answers to common questions.
               </NuxtLink>
@@ -105,7 +105,7 @@ const actions = [
   {
     to: { name: 'index' },
     icon: 'i-heroicons-document-magnifying-glass',
-    text: 'Explore OpnForm'
+    text: 'Explore CRMGO'
   },
   {
     href: '#',

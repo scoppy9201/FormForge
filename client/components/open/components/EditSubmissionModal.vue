@@ -81,7 +81,7 @@ watch(() => props.show, (newShow) => {
       formManager.initialize({
         skipPendingSubmission: true,
         skipUrlParams: true,
-        defaultData: props.submission
+        defaultData: props.submission?.data || props.submission
       })
     })
   }

@@ -1,6 +1,5 @@
 import { computed, watch } from 'vue'
 
-
 /**
  * Dedicated composable for reactive current workspace state
  * Separates current workspace logic from CRUD operations
@@ -10,10 +9,10 @@ export function useCurrentWorkspace() {
   const route = useRoute()
   const router = useRouter()
   const { list } = useWorkspaces()
-  const { isAuthenticated } = useIsAuthenticated()
   
+  // FORCE ENABLE - CRM đã handle auth qua Laravel middleware
   const workspacesQuery = list({
-    enabled: () => isAuthenticated.value
+    enabled: () => true  // BỎ isAuthenticated check
   })
   
   // Watch for workspaces data and apply priority: query param > cookie > first workspace
@@ -30,7 +29,6 @@ export function useCurrentWorkspace() {
         const match = workspaces.find(ws => String(ws.id) === String(requestedId))
         if (match) {
           appStore.setCurrentId(match.id)
-          // Clear workspace_id query param after switching to avoid blocking future switches
           const newQuery = { ...route.query }
           delete newQuery.workspace_id
           router.replace({ query: newQuery })
@@ -118,4 +116,4 @@ export function useCurrentWorkspace() {
     // Actions
     switchTo,
   }
-} 
+}

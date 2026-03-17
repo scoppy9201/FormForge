@@ -35,7 +35,7 @@
                 >
                   <div class="p-4">
                     <Icon
-                      name="opnform:form-style-classic"
+                      name="CRMGO:form-style-classic"
                       mode="svg"
                       class="w-[140px] h-[100px] rounded-md shadow **:transition-colors duration-100 ease-out [--icon-fg:#737373] [--icon-muted:#D4D4D4] group-hover:[--icon-fg:#2563eb] group-hover:[--icon-muted:#93c5fd]"
                     />
@@ -50,7 +50,7 @@
                 >
                   <div class="p-4">
                     <Icon
-                      name="opnform:form-style-focused"
+                      name="CRMGO:form-style-focused"
                       mode="svg"
                       class="w-[140px] h-[100px] rounded-md shadow **:transition-colors duration-100 ease-out [--icon-fg:#737373] [--icon-muted:#D4D4D4] group-hover:[--icon-fg:#2563eb] group-hover:[--icon-muted:#93c5fd]"
                     />

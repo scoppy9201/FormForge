@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-layout min-h-screen bg-neutral-50">
-    <!-- Sidebar -->
-    <AppSidebar />
+    <!-- Sidebar
+    <AppSidebar /> -->
     
     <!-- Main content area -->
     <main class="sm:pl-58">

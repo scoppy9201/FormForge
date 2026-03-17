@@ -14,10 +14,6 @@ class TemplateController extends Controller
 {
     private function getProdTemplates($slug = false)
     {
-        if (!config('app.self_hosted') || !config('opnform.show_official_templates')) {
-            return [];
-        }
-
         $prodTemplates = \Cache::remember('prod_templates', 3600, function () {
             $response = Http::get('https://api.opnform.com/templates');
             if ($response->successful()) {

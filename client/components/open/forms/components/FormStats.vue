@@ -11,14 +11,12 @@
         class="flex-1 !mb-0"
         :date-range="true"
         :disable-future-dates="true"
-        :disabled="!form.is_pro"
       />
       </VForm>
       <UButton 
         class="self-stretch mt-1"
         color="neutral"
         variant="outline"
-        :disabled="!form.is_pro"
         @click.prevent="refresh" 
         icon="i-heroicons-arrow-path" 
         :loading="isLoading"
@@ -27,33 +25,7 @@
     <div
       class="border border-neutral-300 rounded-lg shadow-xs p-4 mb-5 w-full mx-auto mt-2 select-all"
     >
-      <div
-        v-if="!form.is_pro"
-        class="relative"
-      >
-        <div class="absolute inset-0 z-10">
-          <div class="p-5 max-w-md mx-auto flex flex-col items-center justify-center h-full">
-            <p class="text-center">
-              You need a <pro-tag
-                upgrade-modal-title="Upgrade today to access form analytics"
-                class="mx-1"
-              /> subscription to access your form
-              analytics.
-            </p>
-            <UButton
-              class="mt-5 flex justify-center"
-              @click.prevent="openSubscriptionModal({modal_title: 'Upgrade to unlock form Analytics'})"
-              label="Subscribe"
-            />
-          </div>
-        </div>
-        <img
-          src="/img/pages/forms/blurred_graph.png"
-          alt="Sample Graph"
-          class="mx-auto w-full filter blur-md z-0 pointer-events-none"
-        >
-      </div>
-      <VTransition v-else name="fade">
+      <VTransition name="fade">
         <div
           v-if="isLoading"
           class="space-y-3"
@@ -74,7 +46,6 @@
 </template>
 
 <script setup>
-import ProTag from "~/components/app/ProTag.vue"
 import { Line as LineChart } from "vue-chartjs"
 import {
   Chart as ChartJS,
@@ -104,8 +75,6 @@ const props = defineProps({
   },
 })
 
-const { openSubscriptionModal } = useAppModals()
-
 const toDate = new Date()
 const fromDate = new Date(toDate)
 fromDate.setDate(toDate.getDate() - 29)
@@ -131,19 +100,23 @@ const toDateComputed = computed(() => {
   return filterForm.filter_date?.[1] ? filterForm.filter_date[1].split('T')[0] : null
 })
 
-// Get stats data using query composable
+// Get stats data using query composable - BỎ CHECK PRO
 const { data: statsData, isFetching: isQueryLoading } = stats(
   props.form.workspace_id,
   props.form.id,
   fromDateComputed,
   toDateComputed,
-  {enabled: computed(() => import.meta.client && props.form && props.form.is_pro)}
+  {
+    enabled: computed(() => {
+      return import.meta.client && !!props.form
+    })
+  }
 )
 
-// Handle loading state for SSR - show skeleton during SSR if query would run on client
+// Handle loading state for SSR - BỎ CHECK PRO
 const isLoading = computed(() => {
   if (import.meta.server) {
-    return !!props.form && props.form.is_pro
+    return !!props.form
   }
   return isQueryLoading.value
 })
@@ -169,33 +142,43 @@ const chartOptions = {
 
 // Chart data computed from query results
 const chartData = computed(() => {
+  const viewsData = statsData.value?.views || {}
+  const submissionsData = statsData.value?.submissions || {}
+  
+  // Convert object {date: count} to array of counts
+  const viewsCounts = Object.values(viewsData)
+  const submissionsCounts = Object.values(submissionsData)
+  
   const baseDatasets = [
     {
       label: "Form Views",
       backgroundColor: "rgba(59, 130, 246, 1)",
       borderColor: "rgba(59, 130, 246, 1)",
-      data: statsData.value?.views || [],
+      data: viewsCounts,  
     },
     {
       label: "Form Submissions",
       backgroundColor: "rgba(16, 185, 129, 1)",
       borderColor: "rgba(16, 185, 129, 1)",
-      data: statsData.value?.submissions || [],
+      data: submissionsCounts,  
     },
   ]
 
   // Add partial submissions dataset if enabled
   if (props.form.enable_partial_submissions) {
+    const partialSubmissionsData = statsData.value?.partial_submissions || {}
+    const partialSubmissionsCounts = Object.values(partialSubmissionsData)
+    
     baseDatasets.push({
       label: "Partial Submissions",
       backgroundColor: "rgba(255, 193, 7, 1)",
       borderColor: "rgba(255, 193, 7, 1)",
-      data: statsData.value?.partial_submissions || [],
+      data: partialSubmissionsCounts,
     })
   }
 
   return {
-    labels: Object.keys(statsData.value?.views || {}),
+    labels: Object.keys(viewsData),  
     datasets: baseDatasets,
   }
 })

@@ -471,7 +471,7 @@
 }()
 
 /**
- * Starting from here is OpnForm custom code.
+ * Starting from here is CRMGO custom code.
  * @type {string}
  * @param {Object} options
  */

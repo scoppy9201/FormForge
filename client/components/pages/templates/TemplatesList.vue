@@ -83,14 +83,67 @@
           class="relative z-10"
         >
           <div
-            class="grid gap-8 sm:gap-y-12"
-            :class="gridClasses"
+            v-if="userTemplates.length > 0"
+            class="mb-12"
           >
-            <single-template
-              v-for="template in enrichedTemplates"
-              :key="template.id"
-              :template="template"
-            />
+            <div class="flex items-center justify-between mb-6 mt-8">
+              <div>
+                <h2 class="text-2xl font-bold text-neutral-900">
+                  My Templates
+                </h2>
+                <p class="text-sm text-neutral-500 mt-1">
+                  Templates created by you
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm text-neutral-500 bg-blue-50 text-blue-700 px-3 py-1 rounded-full">
+                  {{ userTemplates.length }} {{ userTemplates.length === 1 ? 'template' : 'templates' }}
+                </span>
+              </div>
+            </div>
+            
+            <div
+              class="grid gap-8 sm:gap-y-12"
+              :class="gridClasses"
+            >
+              <single-template
+                v-for="template in userTemplates"
+                :key="template.id"
+                :template="template"
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="officialTemplates.length > 0"
+            :class="{ 'mt-12 pt-12 border-t border-neutral-200': userTemplates.length > 0 }"
+          >
+            <div class="flex items-center justify-between mb-6 mt-8">
+              <div>
+                <h2 class="text-2xl font-bold text-neutral-900">
+                  Official Templates
+                </h2>
+                <p class="text-sm text-neutral-500 mt-1">
+                  Professional templates from CRMGO
+                </p>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-sm text-neutral-500 bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full">
+                  {{ officialTemplates.length }} {{ officialTemplates.length === 1 ? 'template' : 'templates' }}
+                </span>
+              </div>
+            </div>
+            
+            <div
+              class="grid gap-8 sm:gap-y-12"
+              :class="gridClasses"
+            >
+              <single-template
+                v-for="template in officialTemplates"
+                :key="template.id"
+                :template="template"
+              />
+            </div>
           </div>
         </div>
     </section>
@@ -283,5 +336,13 @@ const enrichedTemplates = computed(() => {
   const base = filteredBase.value
   const results = fuseResults.value
   return results && results.length > 0 ? results.map(r => r.item) : base
+})
+
+const userTemplates = computed(() => {
+  return enrichedTemplates.value.filter(t => !t.is_official)
+})
+
+const officialTemplates = computed(() => {
+  return enrichedTemplates.value.filter(t => t.is_official)
 })
 </script>

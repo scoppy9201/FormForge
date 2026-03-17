@@ -20,3 +20,4 @@ client/.env.*
 !.env.example
 !api/.env.example
 !client/.env.example
+node_modules

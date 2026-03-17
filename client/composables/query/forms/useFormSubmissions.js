@@ -78,11 +78,7 @@ export function useFormSubmissions() {
       ...options
     })
 
-    // Computed properties
-    const submissions = computed(() =>
-      query.data.value?.data?.map(record => record.data) || []
-    )
-
+    const submissions = computed(() => query.data.value?.data || [])
     const pagination = computed(() => query.data.value?.meta || null)
 
     // Actions that reset to page 1
@@ -154,8 +150,8 @@ export function useFormSubmissions() {
           return {
             ...oldData,
             data: oldData.data.map(record => 
-              record.data.id === submissionId 
-                ? { ...record, data: { ...record.data, ...updatedSubmission.data?.data } }
+              record.id === submissionId 
+                ? { ...record, ...updatedSubmission.data }
                 : record
             )
           }
@@ -178,9 +174,7 @@ export function useFormSubmissions() {
           
           return {
             ...oldData,
-            data: oldData.data.filter(record => 
-              record.data.id !== submissionId
-            )
+            data: oldData.data.filter(record => record.id !== submissionId)
           }
         }
       )
@@ -201,9 +195,7 @@ export function useFormSubmissions() {
           
           return {
             ...oldData,
-            data: oldData.data.filter(record => 
-              !submissionIds.includes(record.data.id)
-            )
+            data: oldData.data.filter(record => !submissionIds.includes(record.id))
           }
         }
       )

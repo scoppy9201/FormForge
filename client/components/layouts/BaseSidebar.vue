@@ -69,7 +69,7 @@
     >
       <slot name="footer" :isMobileMenuOpen="isMobileMenuOpen">
         <p class="text-xs text-neutral-400 text-center">
-          <span class="font-bold"><NuxtLink class="text-neutral-400" :to="{ name: 'home' }">OpnForm</NuxtLink></span>
+          <span class="font-bold"><NuxtLink class="text-neutral-400" :to="{ name: 'home' }">CRMGO</NuxtLink></span>
           <span class="text-neutral-500" v-if="version"> v{{ version }}</span>
         </p>
       </slot>
@@ -109,4 +109,4 @@ onUnmounted(() => {
 defineExpose({
   isMobileMenuOpen
 })
-</script> 
+</script>

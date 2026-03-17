@@ -105,7 +105,7 @@
             :loading="updateFormLoading"
             :class="saveButtonClass"
             icon="i-ic-outline-save"
-            @click="emit('save-form')"
+            @click="() => { console.log('BUTTON CLICKED'); emit('save-form'); console.log(' EMIT DONE') }"
             :label="form.visibility === 'public' ? 'Publish Form' : 'Save Changes'"
           />
         </TrackClick>

@@ -13,6 +13,8 @@ export default defineAppConfig({
             neutral: 'neutral',
             form: 'form'
         },
+
+        primary: '#0E90D9',
         
         tabs: {
             slots: {

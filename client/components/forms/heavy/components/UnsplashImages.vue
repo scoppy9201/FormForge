@@ -59,7 +59,7 @@
                 <p v-if="image.photographer_name" class="font-medium truncate mb-0.5">{{ image.photographer_name }}</p>
                 <a 
                   v-if="image.photographer_url"
-                  :href="`${image.photographer_url}?utm_source=opnform&utm_medium=referral`"
+                  :href="`${image.photographer_url}?utm_source=CRMGO&utm_medium=referral`"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="text-white/80 hover:text-white text-xs underline block"

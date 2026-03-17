@@ -17,7 +17,7 @@
             >
             <span
               class="ml-2 text-md hidden sm:inline text-black dark:text-white"
-            >OpnForm</span>
+            >CRMGO</span>
           </NuxtLink>
           <WorkspaceDropdown class="ml-6">
             <template #default="{ workspace }">

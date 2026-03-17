@@ -68,78 +68,12 @@ export const useSharedNavigation = () => {
       class: customClasses.length > 0 ? customClasses.join(' ') : undefined
     }
   }
-
-  // Shared navigation sections (Product and Help)
-  const sharedNavigationSections = computed(() => [
-    // Product section
-    {
-      name: 'Product',
-      items: [
-        // What's new - only show if feature base enabled
-        ...(appStore.featureBaseEnabled ? [createNavItem({
-          label: "What's new",
-          icon: 'i-heroicons-megaphone',
-          color: hasNewChanges.value ? 'primary' : 'neutral',
-          trailingIcon: hasNewChanges.value ? 'i-heroicons-sparkles-solid' : undefined,
-          ui: {
-            trailingIcon: 'text-blue-500'
-          },
-          onClick: openChangelog
-        })] : []),
-        createNavItem({
-          label: 'Roadmap',
-          icon: 'i-heroicons-map',
-          to: opnformConfig.links.roadmap,
-          target: '_blank'
-        }),
-        (featurebaseLoaded.value ? createNavItem({
-          label: 'Feature Requests',
-          icon: 'i-heroicons-light-bulb', 
-          onClick: () => {
-            window.postMessage({
-                target: 'FeaturebaseWidget',
-                data: { 
-                  action: 'openFeedbackWidget',
-                  setBoard: 'feature-requests', // optional - preselect a board
-                }
-            })
-          }
-        }):  createNavItem({
-          label: 'Feature Requests',
-          icon: 'i-heroicons-light-bulb', 
-          to: opnformConfig.links.feature_requests,
-          target: '_blank'
-        }))
-      ]
-    },
-    // Help section
-    {
-      name: 'Help',
-      items: [
-        createNavItem({
-          label: 'Help Center',
-          icon: 'i-heroicons-question-mark-circle',
-          to: opnformConfig.links.help_url,
-          target: '_blank'
-        }),
-        createNavItem({
-          label: 'API Docs',
-          icon: 'i-heroicons-code-bracket',
-          to: opnformConfig.links.api_docs,
-          target: '_blank'
-        }),
-        ...(isSelfHosted.value || !crisp ? [] : [createNavItem({
-          label: 'Contact Support',
-          icon: 'i-heroicons-chat-bubble-left-right',
-          onClick: () => crisp.openChat()
-        })])
-      ]
-    }
-  ])
+  
+  const sharedNavigationSections = computed(() => [])
 
   return {
     sharedNavigationSections,
     createNavItem,
     defaultButtonProps
   }
-} 
+}

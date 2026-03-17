@@ -12,7 +12,7 @@ export function useWorkspaces() {
       queryFn: () => { 
         return workspaceApi.list()
       },
-      enabled: () => isAuthenticated.value,
+      enabled: computed(() => true),
       ...options
     })
   }

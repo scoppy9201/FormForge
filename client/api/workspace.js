@@ -1,33 +1,43 @@
 import { apiService } from './base'
 
-const BASE_PATH = '/open/workspaces'
-
 export const workspaceApi = {
-  // Workspace operations
-  list: (options) => apiService.get(BASE_PATH, options),
-  get: (workspaceId) => apiService.get(`${BASE_PATH}/${workspaceId}`),
-  create: (data) => apiService.post(`${BASE_PATH}/create`, data),
-  update: (workspaceId, data) => apiService.put(`${BASE_PATH}/${workspaceId}`, data),
-  delete: (workspaceId) => apiService.delete(`${BASE_PATH}/${workspaceId}`),
-  leave: (workspaceId) => apiService.post(`${BASE_PATH}/${workspaceId}/leave`),
-
-  // User management
+  // Workspace operations - ĐỔI SANG API CRM
+  list: (options) => {
+    // Gọi API CRM trả về workspace ảo từ user
+    return apiService.get('/workspaces/current', options).then(workspace => {
+      // Wrap thành array vì OpenForm expect array
+      return [workspace]
+    })
+  },
+  
+  get: (workspaceId) => {
+    // Trả về workspace ảo
+    return apiService.get('/workspaces/current')
+  },
+  
+  // Các method khác không cần thiết cho CRM - return empty
+  create: (data) => Promise.reject(new Error('Not supported in CRM')),
+  update: (workspaceId, data) => Promise.reject(new Error('Not supported in CRM')),
+  delete: (workspaceId) => Promise.reject(new Error('Not supported in CRM')),
+  leave: (workspaceId) => Promise.reject(new Error('Not supported in CRM')),
+  
+  // User management - không cần
   users: {
-    list: (workspaceId, options) => apiService.get(`${BASE_PATH}/${workspaceId}/users`, options),
-    add: (workspaceId, data) => apiService.post(`${BASE_PATH}/${workspaceId}/users/add`, data),
-    remove: (workspaceId, userId) => apiService.delete(`${BASE_PATH}/${workspaceId}/users/${userId}/remove`),
-    updateRole: (workspaceId, userId, data) => apiService.put(`${BASE_PATH}/${workspaceId}/users/${userId}/update-role`, data)
+    list: (workspaceId, options) => Promise.resolve([]),
+    add: (workspaceId, data) => Promise.reject(new Error('Not supported in CRM')),
+    remove: (workspaceId, userId) => Promise.reject(new Error('Not supported in CRM')),
+    updateRole: (workspaceId, userId, data) => Promise.reject(new Error('Not supported in CRM'))
   },
-
-  // Invite management
+  
+  // Invite management - không cần
   invites: {
-    list: (workspaceId, options) => apiService.get(`${BASE_PATH}/${workspaceId}/invites`, options),
-    resend: (workspaceId, inviteId) => apiService.post(`${BASE_PATH}/${workspaceId}/invites/${inviteId}/resend`),
-    cancel: (workspaceId, inviteId) => apiService.delete(`${BASE_PATH}/${workspaceId}/invites/${inviteId}/cancel`)
+    list: (workspaceId, options) => Promise.resolve([]),
+    resend: (workspaceId, inviteId) => Promise.reject(new Error('Not supported in CRM')),
+    cancel: (workspaceId, inviteId) => Promise.reject(new Error('Not supported in CRM'))
   },
-
-  // Custom domains
+  
+  // Custom domains - không cần
   customDomains: {
-    update: (workspaceId, data) => apiService.put(`${BASE_PATH}/${workspaceId}/custom-domains`, data)
+    update: (workspaceId, data) => Promise.reject(new Error('Not supported in CRM'))
   }
 }

@@ -230,7 +230,7 @@
             <h4
               class="text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl"
             >
-              How OpnForm works
+              How Ommicom CRM form builder works
             </h4>
           </div>
 
@@ -282,8 +282,6 @@
         </div>
       </section>
     </template>
-
-    <open-form-footer class="mt-8 border-t" />
   </div>
 </template>
 
@@ -343,16 +341,8 @@ const canEditTemplate = computed(
   () => user.value && (user.value.admin || user.value.template_editor || template.value?.creator_id === user.value.id),
 )
 
+// Redect to create form with template
 const createFormWithTemplateUrl = computed(() => {
-  if (!user.value) {
-    return {
-      name: "register",
-      query: {
-        redirect: route.fullPath,
-        template: route.params.slug,
-      },
-    }
-  }
   return {
     name: "forms-create",
     query: {

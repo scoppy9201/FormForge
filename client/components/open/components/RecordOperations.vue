@@ -80,13 +80,11 @@ const route = useRoute()
 const showEditSubmissionModal = ref(false)
 const showViewSubmissionModal = ref(false)
 
-// Use form submissions composable for cache management
 const { deleteSubmission } = useFormSubmissions()
 const deleteSubmissionMutation = deleteSubmission()
 
 const submission = computed(() => props.data.find(s => s.id === props.submissionId))
 
-// Auto-open view modal if URL view param matches THIS component's submission ID (only on mount)
 onMounted(() => {
   const urlViewId = route.query.view
   if (urlViewId && parseInt(urlViewId) === props.submissionId) {
@@ -105,13 +103,14 @@ const deleteRecord = () => {
     formId: props.form.id, 
     submissionId: submission.value.id 
   }).then((data) => {
-    if (data.type === "success") {
-      alert.success(data.message)
+    if (data?.success === true) {
+      alert.success(data.message || "Submission deleted successfully!")
     } else {
-      alert.error("Something went wrong!")
+      alert.error(data?.message || "Something went wrong!")
     }
   }).catch((error) => {
-    alert.error(error.data?.message || "Something went wrong!")
+    console.error('Delete error:', error)
+    alert.error(error?.data?.message || error?.message || "Something went wrong!")
   })
 }
 </script>

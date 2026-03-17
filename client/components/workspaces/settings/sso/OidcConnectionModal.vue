@@ -112,7 +112,7 @@
             </template>
             <div class="space-y-4 pt-2">
               <p class="text-xs text-neutral-500">
-                Map IdP claim field names to OpnForm fields. Use this if your IdP uses different field names (e.g., "preferred_username" for email).
+                Map IdP claim field names to CRMGO fields. Use this if your IdP uses different field names (e.g., "preferred_username" for email).
               </p>
               
               <div class="space-y-2">
@@ -160,7 +160,7 @@
                       :name="`options.group_role_mappings.${index}.idp_group`"
                       :form="form"
                       label="IdP Group"
-                      placeholder="opnform_admins"
+                      placeholder="CRMGO_admins"
                       :required="true"
                       size="sm"
                     />

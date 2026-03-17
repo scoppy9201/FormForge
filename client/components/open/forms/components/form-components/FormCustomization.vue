@@ -176,12 +176,12 @@
     >
       <template #label>
         <InputLabel
-          :label="'Hide OpnForm Branding'"
+          :label="'Hide CRMGO Branding'"
           :native-for="'no_branding'"
           class="text-sm font-medium!"
         />
         <pro-tag
-          upgrade-modal-title="Upgrade today to remove OpnForm branding"
+          upgrade-modal-title="Upgrade today to remove CRMGO branding"
           class="-mt-1"
         />
       </template>
@@ -231,7 +231,7 @@
 
 <script setup>
 import EditorSectionHeader from "./EditorSectionHeader.vue"
-import { useWorkingFormStore } from "../../../../../stores/working_form"
+import { useWorkingFormStore } from "~/stores/working_form"
 import GoogleFontPicker from "../../../editors/GoogleFontPicker.vue"
 import ProTag from "~/components/app/ProTag.vue"
 import { DEFAULT_COLOR, ensureSettingsObject } from "@/composables/forms/initForm"
@@ -281,8 +281,9 @@ const onChangeConfettiOnSubmission = (val) => {
 }
 
 const onChangeNoBranding = (val) => {
+  const ALLOW_FREE_TEST = true // sau này đổi thành false
   if (!isPro.value && val) {
-    openSubscriptionModal({ modal_title: "Upgrade today to remove OpnForm branding" })
+    openSubscriptionModal({ modal_title: "Upgrade today to remove CRMGO branding" })
     setTimeout(() => {
       form.value.no_branding = false
     }, 300)

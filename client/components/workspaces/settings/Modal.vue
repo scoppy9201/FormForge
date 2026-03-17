@@ -23,7 +23,6 @@
     </SettingsModalPage>
 
     <SettingsModalPage
-      v-if="workspace && workspace.is_admin"
       id="domains"
       label="Domains"
       icon="i-heroicons-globe-alt"
@@ -32,7 +31,6 @@
     </SettingsModalPage>
     
     <SettingsModalPage
-      v-if="workspace && workspace.is_admin"
       id="emails"
       label="Emails"
       icon="i-heroicons-envelope"
@@ -41,7 +39,6 @@
     </SettingsModalPage>
 
     <SettingsModalPage
-      v-if="workspace && workspace.is_admin"
       id="sso"
       label="SSO"
       icon="i-heroicons-shield-check"
@@ -50,7 +47,6 @@
     </SettingsModalPage>
 
     <SettingsModalPage
-      v-if="workspace && workspace.is_admin"
       id="custom-code"
       label="Custom Code"
       icon="i-heroicons-code-bracket"
@@ -78,25 +74,21 @@ const props = defineProps({
 
 const { current: workspace } = useCurrentWorkspace()
 
-// Modal state is now derived from the presence of an active tab
 const isOpen = computed({
   get: () => !!props.activeTab,
   set: (value) => {
-    // When the modal is closed (e.g., via v-model), we signal this by nullifying the active tab.
     if (!value) {
       emit('update:activeTab', null)
     }
   }
 })
 
-// Two-way binding for the active tab with the parent
 const localActiveTab = computed({
   get: () => props.activeTab,
   set: (value) => emit('update:activeTab', value)
 })
 
-// The @close event from SettingsModal triggers this
 const closeModal = () => {
   emit('update:activeTab', null)
 }
-</script> 
+</script>

@@ -41,7 +41,7 @@
       </div>
       <div class="relative z-20 flex flex-col items-center gap-4 pb-1">
         <h2 class="text-xl md:text-2xl text-center font-medium text-white">
-          {{ innerJson.title ? innerJson.title : 'Ready to upgrade your OpnForm forms?' }}
+          {{ innerJson.title ? innerJson.title : 'Ready to upgrade your CRMGO forms?' }}
         </h2>
         <UButton
           to="/register"
@@ -51,7 +51,7 @@
           icon="i-heroicons-arrow-right"
           trailing
         >
-          Try OpnForm for free
+          Try CRMGO for free
         </UButton>
       </div>
     </div>

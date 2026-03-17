@@ -5,9 +5,9 @@
       style="height: 100%;"
     >
       <iframe
-        id="opnform-form-abuse-report-wnociq"
+        id="CRMGO-form-abuse-report-wnociq"
         style="border:none;width:100%;min-height: 1000px;"
-        src="https://opnform.com/forms/opnform-form-abuse-report-wnociq"
+        src="https://CRMGO.com/forms/CRMGO-form-abuse-report-wnociq"
       />
     </div>
     <open-form-footer />
@@ -28,8 +28,8 @@ defineRouteRules({
 useHead({
   script: [
     {
-      src: 'https://opnform.com/widgets/iframe.min.js',
-      onload: "initEmbed('opnform-form-abuse-report-wnociq')"
+      src: 'https://CRMGO.com/widgets/iframe.min.js',
+      onload: "initEmbed('CRMGO-form-abuse-report-wnociq')"
     }
   ]
 })

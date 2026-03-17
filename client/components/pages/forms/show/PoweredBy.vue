@@ -19,16 +19,16 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: 'Made with OpnForm'
+    default: 'Made with CRMGO'
   },
   color: {
     type: String,
-    default: '#3B82F6' // Default blue
+    default: '#0E90D9' // Default blue
   }
 })
 
 const targetLink = computed(() => {
-  return 'https://opnform.com?utm_source=' + props.source + '&utm_content=powered_by_btn'
+  return 'https://coresyscompany.com' 
 })
 
 function getLuminanceFromHex (hex) {

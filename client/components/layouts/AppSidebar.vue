@@ -8,11 +8,11 @@
           <template #default="{ workspace }">
             <button
               v-if="workspace"
-              class="flex items-center gap-2 p-2 rounded-md hover:bg-neutral-200 transition-colors min-w-32 text-left"
+              class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors min-w-32 text-left"
             >
               <WorkspaceIcon :workspace="workspace" />
               <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-neutral-800 truncate">
+                <p class="text-sm font-semibold text-gray-900 truncate">
                   {{ workspace.name }}
                 </p>
               </div>
@@ -26,11 +26,11 @@
         <UserDropdown>
           <template #default="{ user }">
             <button
-              class="flex items-center gap-2 p-2 rounded-md hover:bg-neutral-200 transition-colors"
+              class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors"
             >
               <img
                 :src="user?.photo_url"
-                class="rounded-full w-6 h-6"
+                class="rounded-full w-6 h-6 ring-2 ring-gray-200"
                 :alt="user?.name"
               >
             </button>
@@ -46,14 +46,13 @@
         :key="section.name || 'main'"
         :class="[
           index !== navigationSections.length - 1 ? 'mb-6' : '',
-          // Push Product and Help sections to bottom
           index === 1 ? 'mt-auto' : ''
         ]"
       >
-        <!-- Section Title (if exists) -->
+        <!-- Section Title -->
         <h3 
           v-if="section.name"
-          class="text-xs font-medium text-neutral-400 tracking-wider mb-2 px-3"
+          class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3"
         >
           {{ section.name }}
         </h3>
@@ -87,15 +86,12 @@ const { current: workspace } = useCurrentWorkspace()
 const isSelfHosted = computed(() => useFeatureFlag('self_hosted'))
 const { openSubscriptionModal } = useAppModals()
 
-// Check if current route matches a prefix
 function isActiveRoute(prefix) {
   if (!prefix) return false
   return route.name?.startsWith(prefix)
 }
 
-// Navigation sections structure
 const navigationSections = computed(() => [
-  // Section 1: Main navigation (no name)
   {
     name: null,
     items: [
@@ -104,23 +100,24 @@ const navigationSections = computed(() => [
         icon: 'i-heroicons-plus',
         to: { name: 'forms-create' },
         active: isActiveRoute('forms-create'),
-        color: 'primary',
-        variant: 'ghost',
+        // Màu xanh hệ thống
+        class: 'bg-[#0ea5e9] hover:bg-[#0284c7] text-white font-medium',
         kbd: ['N'],
       }),
       createNavItem({
         label: 'Home', 
         icon: 'i-heroicons-home',
         to: { name: 'home' },
-        active: isActiveRoute('home')
+        active: isActiveRoute('home'),
+        class: 'hover:bg-gray-100'
       }),
       createNavItem({
         label: 'Templates',
         icon: 'i-heroicons-document-duplicate',
         to: { name: 'templates-my-templates' },
-        active: isActiveRoute('templates')
+        active: isActiveRoute('templates'),
+        class: 'hover:bg-gray-100'
       }),
-      // Show upgrade for non-pro users
       ...(workspace.value && !workspace.value.is_pro && !isSelfHosted.value ? [createNavItem({
         label: 'Upgrade to Pro',
         icon: 'i-heroicons-sparkles-solid', 
@@ -130,11 +127,10 @@ const navigationSections = computed(() => [
             modal_title: 'Upgrade to Pro plan',
           })
         },
-        color: 'primary' // Override default color
+        class: 'text-[#0ea5e9] hover:bg-blue-50'
       })] : [])
     ]
   },
-  // Add shared navigation sections (Product and Help)
   ...sharedNavigationSections.value
 ])
 
@@ -143,4 +139,4 @@ function handleItemClick(_item) {
     sidebar.value.isMobileMenuOpen = false
   }
 }
-</script> 
+</script>

@@ -1,13 +1,17 @@
 import { contentApi } from '~/api/content'
-
-export default defineNuxtPlugin((nuxtApp) => {
-  // Access the same state that was set on server
+export default defineNuxtPlugin(async (nuxtApp) => {
   const featureFlagsState = useState('featureFlags', () => ({}))
-    
-  // Provide refresh capability
+  
+  // Load flags on client startup vì ssr: false
+  try {
+    const flags = await contentApi.featureFlags.list()
+    featureFlagsState.value = flags
+  } catch (error) {
+    console.error('Failed to load feature flags:', error)
+  }
+
   nuxtApp.provide('refreshFeatureFlags', async () => {
     try {
-      // Force fresh fetch by adding cache-busting timestamp
       const flags = await contentApi.featureFlags.list({
         query: { t: Date.now() }
       })
@@ -18,4 +22,4 @@ export default defineNuxtPlugin((nuxtApp) => {
       throw error
     }
   })
-}) 
+})

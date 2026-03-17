@@ -89,7 +89,7 @@ const customCodeHelp = computed(() => {
   }
   // In self-hosted mode with flag disabled (and no custom domain), show safety notice with docs link
   if (selfHosted && !allowSelfHosted && !hasCustomDomain) {
-    return 'Custom code is disabled for safety on self-hosted. Enable via CUSTOM_CODE_ENABLE_SELF_HOSTED=true. See technical docs: https://docs.opnform.com/introduction'
+    return 'Custom code is disabled for safety on self-hosted. Enable via CUSTOM_CODE_ENABLE_SELF_HOSTED=true. See technical docs: https://docs.CRMGO.com/introduction'
   }
   return 'Custom code requires to be using a custom domain.'
 })

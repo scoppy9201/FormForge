@@ -105,7 +105,7 @@ const formManagerInit = () => {
   formManager.initialize({
     skipPendingSubmission: true,
     skipUrlParams: true,
-    defaultData: submission.value
+    defaultData: props.submission?.data || props.submissions
   })
   updateUrlWithSubmission(submission.value.id)
 }

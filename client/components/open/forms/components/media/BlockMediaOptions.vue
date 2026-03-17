@@ -39,12 +39,12 @@ const iconBaseClass = 'w-[70px] h-[50px] rounded transition-colors duration-150 
 const iconSelectedClass = '[--icon-fg:#3b82f6] [--icon-muted:#60a5fa] text-blue-500'
 
 const layoutOptions = [
-  { name: 'between',      icon: 'opnform:form-layout-between',      iconClass: iconBaseClass, iconSelectedClass },
-  { name: 'left-small',   icon: 'opnform:form-layout-left-small',    iconClass: iconBaseClass, iconSelectedClass },
-  { name: 'left-split',   icon: 'opnform:form-layout-left-split',    iconClass: iconBaseClass, iconSelectedClass },
-  { name: 'background',   icon: 'opnform:form-layout-background',    iconClass: iconBaseClass, iconSelectedClass },
-  { name: 'right-small',  icon: 'opnform:form-layout-right-small',   iconClass: iconBaseClass, iconSelectedClass },
-  { name: 'right-split',  icon: 'opnform:form-layout-right-split',   iconClass: iconBaseClass, iconSelectedClass },
+  { name: 'between',      icon: 'CRMGO:form-layout-between',      iconClass: iconBaseClass, iconSelectedClass },
+  { name: 'left-small',   icon: 'CRMGO:form-layout-left-small',    iconClass: iconBaseClass, iconSelectedClass },
+  { name: 'left-split',   icon: 'CRMGO:form-layout-left-split',    iconClass: iconBaseClass, iconSelectedClass },
+  { name: 'background',   icon: 'CRMGO:form-layout-background',    iconClass: iconBaseClass, iconSelectedClass },
+  { name: 'right-small',  icon: 'CRMGO:form-layout-right-small',   iconClass: iconBaseClass, iconSelectedClass },
+  { name: 'right-split',  icon: 'CRMGO:form-layout-right-split',   iconClass: iconBaseClass, iconSelectedClass },
 ]
 
 function setDefaultImageSettings() {

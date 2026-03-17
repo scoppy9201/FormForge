@@ -155,7 +155,9 @@
             :is="fieldComponents[col.type]"
             class="border-neutral-100 dark:border-neutral-900"
             :property="col"
-            :value="row.original[col.id]"
+            :value="['created_at', 'status', 'ip_address'].includes(col.id) 
+              ? row.original[col.id] 
+              : row.original.data?.[col.id]"
           />
         </div>
       </template>

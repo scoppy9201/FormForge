@@ -9,11 +9,18 @@ export function useTemplates() {
     return useQuery({
       queryKey: ['templates', 'list', options.params || {}],
       queryFn: () => templatesApi.list(options.params || {}),
-      onSuccess: (data) => {
-        data?.forEach(template => {
+      onSuccess: (response) => {
+        // Backend trả về { data: [...], meta: {...} }
+        const templates = response?.data || response || []
+        
+        templates.forEach(template => {
           queryClient.setQueryData(['templates', template.id], template)
           queryClient.setQueryData(['templates', 'slug', template.slug], template)
         })
+      },
+      // Transform response để component nhận được array thay vì object
+      select: (response) => {
+        return response?.data || response || []
       },
       ...options
     })
@@ -37,7 +44,6 @@ export function useTemplates() {
     return useQuery({
       queryKey: ['templates', id],
       queryFn: () => {
-        // Since there's no getById in the API, we get from cached list
         const cachedTemplates = queryClient.getQueryData(['templates', 'list'])
         return cachedTemplates?.find(t => t.id === id) || null
       },
@@ -57,11 +63,17 @@ export function useTemplates() {
       queryKey: ['templates', 'list', { page: page.value, ...filters.value }],
       queryFn: () => templatesApi.list({ page: page.value, ...filters.value }),
       keepPreviousData: true,
-      onSuccess: (data) => {
-        data?.data?.forEach(template => {
+      onSuccess: (response) => {
+        // Backend trả về { data: [...], meta: {...} }
+        const templates = response?.data || []
+        
+        templates.forEach(template => {
           queryClient.setQueryData(['templates', template.id], template)
           queryClient.setQueryData(['templates', 'slug', template.slug], template)
         })
+      },
+      select: (response) => {
+        return response?.data || []
       },
       ...options
     })
@@ -72,21 +84,21 @@ export function useTemplates() {
     return useMutation({
       mutationFn: (data) => templatesApi.create(data),
       onSuccess: (newTemplate) => {
-      // Update templates list
-      queryClient.setQueryData(['templates', 'list'], (old) => {
-        if (!old) return [newTemplate]
-        if (Array.isArray(old)) return [newTemplate, ...old]
-        if (old.data) {
-          return {
-            ...old,
-            data: [newTemplate, ...old.data]
+        // Update templates list
+        queryClient.setQueryData(['templates', 'list'], (old) => {
+          if (!old) return [newTemplate]
+          if (Array.isArray(old)) return [newTemplate, ...old]
+          if (old.data) {
+            return {
+              ...old,
+              data: [newTemplate, ...old.data]
+            }
           }
-        }
-        return old
-      })
-      // Cache the new template
-      queryClient.setQueryData(['templates', newTemplate.id], newTemplate)
-      queryClient.setQueryData(['templates', 'slug', newTemplate.slug], newTemplate)
+          return old
+        })
+        // Cache the new template
+        queryClient.setQueryData(['templates', newTemplate.id], newTemplate)
+        queryClient.setQueryData(['templates', 'slug', newTemplate.slug], newTemplate)
       },
       ...options
     })
@@ -96,30 +108,28 @@ export function useTemplates() {
     return useMutation({
       mutationFn: ({ id, data }) => templatesApi.update(id, data),
       onSuccess: (updatedTemplate, { id }) => {
-      // Update individual template cache
-      queryClient.setQueryData(['templates', id], updatedTemplate)
-      if (updatedTemplate.slug) {
-        queryClient.setQueryData(['templates', 'slug', updatedTemplate.slug], updatedTemplate)
-      }
-      
-      // Update in templates lists
-      queryClient.setQueryData(['templates', 'list'], (old) => {
-        if (!old) return old
-        if (Array.isArray(old)) {
-          return old.map(template => 
-            template.id === id ? { ...template, ...updatedTemplate } : template
-          )
+        queryClient.setQueryData(['templates', id], updatedTemplate)
+        if (updatedTemplate.slug) {
+          queryClient.setQueryData(['templates', 'slug', updatedTemplate.slug], updatedTemplate)
         }
-        if (old.data) {
-          return {
-            ...old,
-            data: old.data.map(template => 
+        
+        queryClient.setQueryData(['templates', 'list'], (old) => {
+          if (!old) return old
+          if (Array.isArray(old)) {
+            return old.map(template => 
               template.id === id ? { ...template, ...updatedTemplate } : template
             )
           }
-        }
-        return old
-      })
+          if (old.data) {
+            return {
+              ...old,
+              data: old.data.map(template => 
+                template.id === id ? { ...template, ...updatedTemplate } : template
+              )
+            }
+          }
+          return old
+        })
       },
       ...options
     })
@@ -129,28 +139,26 @@ export function useTemplates() {
     return useMutation({
       mutationFn: (id) => templatesApi.delete(id),
       onSuccess: (_, deletedId) => {
-      const deletedTemplate = queryClient.getQueryData(['templates', deletedId])
-      
-      // Remove from all caches
-      queryClient.removeQueries({ queryKey: ['templates', deletedId] })
-      if (deletedTemplate?.slug) {
-        queryClient.removeQueries({ queryKey: ['templates', 'slug', deletedTemplate.slug] })
-      }
-      
-      // Remove from templates lists
-      queryClient.setQueryData(['templates', 'list'], (old) => {
-        if (!old) return old
-        if (Array.isArray(old)) {
-          return old.filter(template => template.id !== deletedId)
+        const deletedTemplate = queryClient.getQueryData(['templates', deletedId])
+        
+        queryClient.removeQueries({ queryKey: ['templates', deletedId] })
+        if (deletedTemplate?.slug) {
+          queryClient.removeQueries({ queryKey: ['templates', 'slug', deletedTemplate.slug] })
         }
-        if (old.data) {
-          return {
-            ...old,
-            data: old.data.filter(template => template.id !== deletedId)
+        
+        queryClient.setQueryData(['templates', 'list'], (old) => {
+          if (!old) return old
+          if (Array.isArray(old)) {
+            return old.filter(template => template.id !== deletedId)
           }
-        }
-        return old
-      })
+          if (old.data) {
+            return {
+              ...old,
+              data: old.data.filter(template => template.id !== deletedId)
+            }
+          }
+          return old
+        })
       },
       ...options
     })
@@ -177,22 +185,17 @@ export function useTemplates() {
   }
 
   return {
-    // Queries
     list,
     detail,
     detailById,
     paginatedList,
-    
-    // Mutations
     create,
     update,
     remove,
-    
-    // Utilities
     invalidateAll,
     invalidateDetail,
     invalidateList,
     getTemplateBySlug,
     getTemplateById
   }
-} 
+}

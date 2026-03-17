@@ -158,14 +158,88 @@ onMounted(() => {
   }
 })
 
-  // Track form view
+// Track form view
 let hasViewedForm = false
 const trackFormView = () => {
   if (import.meta.client && !form.value?.is_password_protected && !hasViewedForm) {
     hasViewedForm = true
     nextTick(() => {
+      // Track vào OpenForm (giữ nguyên)
       formsApi.view(form.value.slug)
+      
+      // Track vào CRM (thêm mới)
+      trackViewToCRM()
     })
+  }
+}
+
+const trackViewToCRM = async () => {
+  try {
+    const formId = form.value?.id
+    if (!formId) {
+      console.warn('No form ID, skipping CRM tracking')
+      return
+    }
+
+    let crmUrl = null
+    
+    // 1. Thử lấy từ parent window (nếu trong iframe)
+    try {
+      if (window.parent && window.parent !== window) {
+        crmUrl = window.parent.location.origin
+        console.log('Detected CRM URL from parent:', crmUrl)
+      }
+    } catch (e) {
+      console.log('Parent blocked (cross-origin), trying referrer...')
+    }
+    
+    // 2. Fallback sang referrer
+    if (!crmUrl && document.referrer) {
+      try {
+        const url = new URL(document.referrer)
+        crmUrl = url.origin
+        console.log('Detected CRM URL from referrer:', crmUrl)
+      } catch (e) {
+        console.warn('Invalid referrer URL')
+      }
+    }
+    
+    // 3. Default cho localhost
+    if (!crmUrl) {
+      crmUrl = 'http://127.0.0.1:8000'
+      console.log('Using default CRM URL:', crmUrl)
+    }
+    
+    console.log('Tracking to:', `${crmUrl}/api/form-builder/forms/${formId}/track-view`)
+
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 5000)
+    
+    const response = await fetch(`${crmUrl}/api/form-builder/forms/${formId}/track-view`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      signal: controller.signal,
+      mode: 'cors',
+    })
+    
+    clearTimeout(timeoutId)
+    
+    if (!response.ok) {
+      console.error('Tracking failed:', response.status, response.statusText)
+    } else {
+      const data = await response.json()
+      console.log('Tracked successfully:', data)
+    }
+    
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.warn('Tracking timeout')
+    } else {
+      console.error('Tracking error:', error.message)
+    }
   }
 }
 

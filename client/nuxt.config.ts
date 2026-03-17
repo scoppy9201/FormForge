@@ -3,8 +3,20 @@ import runtimeConfig from "./runtimeConfig"
 import sitemap from "./sitemap"
 
 export default defineNuxtConfig({
+  ssr: false,   
+  
+  app: {
+    baseURL: '/form-builder/',
+    buildAssetsDir: '_nuxt/', 
+    cdnURL: ''  
+  },
+  
+  alias: {
+    '@formbuilder': '~/components',
+  },
+  
   loglevel: process.env.NUXT_LOG_LEVEL || 'info',
-  devtools: {enabled: true},
+  devtools: process.client ? { enabled: true } : { enabled: false },
   css: ['~/css/app.css'],
 
   // Disable certain plugins during testing
@@ -30,6 +42,12 @@ export default defineNuxtConfig({
 
   build: {
       transpile: ["vue-notion", "vue-signature-pad", "@zxing/library"],
+  },
+
+  vite: {
+    build: {
+      assetsInlineLimit: 0,  // Không inline bất kỳ asset nào
+    }
   },
 
   i18n: {
@@ -75,14 +93,21 @@ export default defineNuxtConfig({
   },
 
   experimental: {
-      inlineRouteRules: true
+      inlineRouteRules: true,
+      appManifest: false,
+      payloadExtraction: false
   },
+
+  // Fix lỗi sitemap khi build
+    site: {
+        url: process.env.NUXT_PUBLIC_APP_URL || 'http://localhost:3000'
+    },
 
   sentry: {
       sourceMapsUploadOptions: {
           authToken: process.env.SENTRY_AUTH_TOKEN,
-          org: "opnform",
-          project: "opnform-vue",
+          org: "CRMGO",
+          project: "CRMGO-vue",
       },
   },
 
@@ -138,7 +163,7 @@ export default defineNuxtConfig({
   icon: {
       customCollections: [
           {
-              prefix: 'opnform',
+              prefix: 'CRMGO',
               dir: './public/icons'
           },
       ],
