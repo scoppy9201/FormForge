@@ -176,7 +176,7 @@
     >
       <template #label>
         <InputLabel
-          :label="'Hide CRMGO Branding'"
+          :label="'Hide Ommicom Branding'"
           :native-for="'no_branding'"
           class="text-sm font-medium!"
         />

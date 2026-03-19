@@ -19,7 +19,7 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: 'Made with CRMGO'
+    default: 'Made with Ommicom'
   },
   color: {
     type: String,
@@ -28,7 +28,7 @@ const props = defineProps({
 })
 
 const targetLink = computed(() => {
-  return 'https://coresyscompany.com' 
+  return 'https://Ommicom.com' 
 })
 
 function getLuminanceFromHex (hex) {
